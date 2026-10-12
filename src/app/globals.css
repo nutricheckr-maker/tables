@@ -1,0 +1,114 @@
+@import "tailwindcss";
+
+/* High-contrast neutral palette; one accent; status colours reserved for fact state. */
+:root {
+  --bg: #f7f7f5;
+  --surface: #ffffff;
+  --ink: #0b0b0c;
+  --muted: #55555c;
+  --faint: #8a8a91;
+  --line: #e2e2e0;
+  --line-strong: #c9c9c6;
+  --accent: #1f4fd6;
+  --accent-ink: #ffffff;
+  --good: #0b7a0b;
+  --good-fill: #0ca30c;
+  --bad: #b42323;
+  --bad-fill: #d03b3b;
+  --dev-fill: #b9b9bd;
+  --focus: #1f4fd6;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0c0c0d;
+    --surface: #151517;
+    --ink: #f4f4f2;
+    --muted: #a3a3a8;
+    --faint: #6e6e74;
+    --line: #26262a;
+    --line-strong: #3a3a40;
+    --accent: #6f95ff;
+    --accent-ink: #0c0c0d;
+    --good: #4fd04f;
+    --good-fill: #0ca30c;
+    --bad: #ff7a7a;
+    --bad-fill: #d03b3b;
+    --dev-fill: #55555c;
+    --focus: #8fb0ff;
+    color-scheme: dark;
+  }
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-good: var(--good);
+  --color-good-fill: var(--good-fill);
+  --color-bad: var(--bad);
+  --color-bad-fill: var(--bad-fill);
+  --color-dev-fill: var(--dev-fill);
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+}
+
+html {
+  background: var(--bg);
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* Hide number-input spinners if any slip through. */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Weak cells carry a hatch so state is not encoded by colour alone. */
+.cell-weak {
+  background: repeating-linear-gradient(
+    135deg,
+    var(--bad-fill) 0 2px,
+    color-mix(in srgb, var(--bad-fill) 45%, transparent) 2px 4px
+  );
+}
+
+@keyframes countdown {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}
+
+/* Distraction-free training: the trainer sets data-focus on <body>. */
+body[data-focus] .site-nav {
+  display: none;
+}
