@@ -2,6 +2,27 @@
 
 A local-first, keyboard-first trainer for instant recall of multiplication facts, from 1×1 to 20×20 and then up to 30×30, 40×40 and 50×50. It is adaptive and deterministic: no accounts, no external APIs, no AI.
 
+## Download
+
+Desktop builds for Windows, macOS and Linux are on the [Releases page](https://github.com/nutricheckr-maker/tables/releases/latest):
+
+| Platform | File |
+|---|---|
+| Windows | `Tables-<version>-windows-setup.exe` (installer) or `Tables-<version>-windows-portable.exe` (no install) |
+| macOS (Apple silicon) | `Tables-<version>-mac-arm64.dmg` |
+| macOS (Intel) | `Tables-<version>-mac-x64.dmg` |
+| Linux | `Tables-<version>-linux-x86_64.AppImage`, `.deb` or `.tar.gz` |
+
+The builds are not code-signed, so expect a first-run warning:
+
+- **Windows** — SmartScreen says "Windows protected your PC": choose *More info → Run anyway*.
+- **macOS** — if the app "can't be opened", open *System Settings → Privacy & Security* and choose *Open Anyway*, or run `xattr -cr /Applications/Tables.app`.
+- **Linux** — make the AppImage executable: `chmod +x Tables-*.AppImage`.
+
+The desktop app is the trainer only; the mental-math gate below is a Linux service you run from source. It keeps progress in the platform's app-data folder (`%APPDATA%\Tables\tables`, `~/Library/Application Support/Tables/tables`, `~/.config/Tables/tables`).
+
+To build the installers yourself: `npm run desktop:dist` (output in `dist-desktop/`). To publish a release, push a version tag (`git tag v0.1.0 && git push --tags`); the Release workflow builds every platform and attaches the files.
+
 ## Run
 
 ```bash

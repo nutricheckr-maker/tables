@@ -1,7 +1,15 @@
 {
   "name": "tables",
+  "productName": "Tables",
   "version": "0.1.0",
+  "description": "Adaptive, keyboard-first multiplication mastery trainer from 1×1 to 50×50",
+  "author": "Aryan",
   "private": true,
+  "main": "desktop/main.cjs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nutricheckr-maker/tables.git"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -9,7 +17,10 @@
     "lint": "eslint",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
-    "check": "npm run lint && npm run typecheck && npm test"
+    "check": "npm run lint && npm run typecheck && npm test",
+    "desktop:build": "node desktop/build.mjs",
+    "desktop:start": "electron .",
+    "desktop:dist": "node desktop/build.mjs && electron-builder --publish never"
   },
   "dependencies": {
     "next": "16.4.0",
@@ -21,10 +32,100 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "electron": "^44.9.0",
+    "electron-builder": "^26.15.3",
     "eslint": "^9",
     "eslint-config-next": "16.4.0",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^3.2.7"
+  },
+  "build": {
+    "appId": "io.github.nutricheckr-maker.tables",
+    "productName": "Tables",
+    "artifactName": "Tables-${version}-${os}-${arch}.${ext}",
+    "directories": {
+      "output": "dist-desktop",
+      "buildResources": "desktop"
+    },
+    "files": [
+      "desktop/main.cjs",
+      "desktop/icon.png",
+      "package.json",
+      "!node_modules/**"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "desktop/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "artifactName": "Tables-${version}-windows-setup.${ext}"
+    },
+    "portable": {
+      "artifactName": "Tables-${version}-windows-portable.${ext}"
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ],
+      "category": "public.app-category.education",
+      "icon": "desktop/icon.png",
+      "identity": "-",
+      "hardenedRuntime": false
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "deb",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "tar.gz",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "category": "Education",
+      "icon": "desktop/icon.png",
+      "maintainer": "Aryan <noreply@github.com>"
+    },
+    "afterPack": "desktop/after-pack.cjs"
   }
 }

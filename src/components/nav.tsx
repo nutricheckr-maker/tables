@@ -8,7 +8,7 @@ const LINKS = [
   { href: "/train", label: "Train" },
   { href: "/gate", label: "Gate" },
   { href: "/settings", label: "Settings" },
-] as const;
+].filter((l) => l.href !== "/gate" || !process.env.NEXT_PUBLIC_TABLES_DESKTOP); // the desktop app runs no gate
 
 export function Nav() {
   const path = usePathname();
