@@ -2,6 +2,7 @@ import { stageReadiness, type AssessmentRecord } from "../engine/advancement";
 import { MAX_STAGE, validateSettings } from "../engine/config";
 import type { SessionSummary } from "../engine/session";
 import type { FactRecord, StageId } from "../engine/types";
+import { changedFacts, mergeStates } from "../persistence/merge";
 import type { ProgressRepository } from "../persistence/repository";
 import { initialState, MAX_ASSESSMENTS, MAX_SESSIONS, parseState, type AppState } from "../persistence/schema";
 
@@ -73,12 +74,31 @@ export class AppStore {
     if (this.snapshot.status !== "ready" || !this.dirty) return;
     this.dirty = false;
     try {
-      await this.repo.save(this.snapshot.state);
+      const res = await this.repo.save(this.snapshot.state);
       if (this.snapshot.saveError) this.set({ saveError: null });
+      if (res?.stale) void this.refresh();
     } catch (e) {
       this.dirty = true;
       this.set({ saveError: `Progress could not be saved: ${e instanceof Error ? e.message : String(e)}` });
     }
+  }
+
+  /**
+   * Pull the shared copy and merge it in (progress only grows, so this never
+   * loses local work). Used when another tab or the gate page may have written.
+   */
+  async refresh() {
+    if (this.snapshot.status !== "ready" || !this.repo.refresh) return;
+    const server = await this.repo.refresh().catch(() => null);
+    if (!server) return;
+    const current = this.snapshot.state;
+    const merged = mergeStates(current, server);
+    const changed =
+      Object.keys(changedFacts(merged, current)).length > 0 ||
+      merged.sessions.length !== current.sessions.length ||
+      merged.assessments.length !== current.assessments.length ||
+      merged.progress.unlockedStage !== current.progress.unlockedStage;
+    if (changed) this.set({ state: merged });
   }
 
   dismissNotices() {

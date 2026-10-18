@@ -1,0 +1,19 @@
+#!/bin/sh
+# tables-gate — status and manual control of the mental-math gate.
+# Granting is only possible by passing a challenge in the browser.
+set -eu
+BASE=http://127.0.0.1:5170
+case "${1:-status}" in
+  status)
+    curl -fsS -m 3 "$BASE/api/gate/status" || { echo "gate service not reachable — protected apps are locked (fail closed)"; exit 1; } ;;
+  lock)
+    curl -fsS -m 3 -X POST "$BASE/api/gate/revoke?reason=${2:-manual}" >/dev/null && echo locked ;;
+  open|challenge)
+    xdg-open "$BASE/gate${2:+?app=$2}" >/dev/null 2>&1 & ;;
+  logs)
+    exec journalctl --user -u tables -n "${2:-50}" --no-pager ;;
+  restart)
+    exec systemctl --user restart tables ;;
+  *)
+    echo "usage: tables-gate [status|lock|open [chatgpt|gemini|stream]|logs [N]|restart]" >&2; exit 2 ;;
+esac

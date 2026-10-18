@@ -1,0 +1,16 @@
+[Unit]
+Description=Tables — multiplication trainer and mental-math gate (app :5170, gate proxy :8898, Stream :5180)
+Documentation=file:%h/Apps/tables/GATE.md
+# Stream listens on a private socket; this unit owns Stream's public port.
+Wants=stream.service
+After=network.target stream.service
+
+[Service]
+WorkingDirectory=%h/Apps/tables
+ExecStart=%h/.local/node/bin/node %h/Apps/tables/server.mjs
+Environment=NODE_ENV=production
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=default.target

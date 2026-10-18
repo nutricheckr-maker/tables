@@ -32,7 +32,8 @@ export interface Question {
   product: number;
 }
 
-export type Mode = "focused" | "mixed" | "speed" | "weakness" | "assessment";
+/** "gate" sessions are mental-math gate challenges, recorded as practice. */
+export type Mode = "focused" | "mixed" | "speed" | "weakness" | "assessment" | "gate";
 
 /**
  * slip         – an isolated miss on a fact with a strong recent record.

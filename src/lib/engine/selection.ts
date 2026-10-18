@@ -7,7 +7,7 @@ import { correctTimes, median } from "./stats";
 import type { Fact, FactKey, FactRecord, Mode } from "./types";
 
 export type Records = Partial<Record<FactKey, FactRecord>>;
-export type PracticeMode = Exclude<Mode, "assessment">;
+export type PracticeMode = Exclude<Mode, "assessment" | "gate">;
 
 export type SelectionReason = "relearn" | "weak" | "due" | "new" | "slow" | "review";
 

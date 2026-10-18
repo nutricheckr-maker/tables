@@ -22,6 +22,7 @@ export const MODE_LABEL: Record<Mode, string> = {
   speed: "Speed training",
   weakness: "Weakness elimination",
   assessment: "Mastery assessment",
+  gate: "Gate challenge",
 };
 
 export function fmtRelative(ts: number | null, now: number): string {

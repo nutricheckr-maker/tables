@@ -1,0 +1,23 @@
+{
+  "manifest_version": 2,
+  "name": "Tables gate",
+  "version": "1.0.0",
+  "description": "Sends ChatGPT and Gemini to the tables challenge while the gate is locked, and offers to unlock again when access ends.",
+  "browser_specific_settings": {
+    "gecko": { "id": "tables-gate@nebula.local", "strict_min_version": "128.0" }
+  },
+  "permissions": [
+    "webRequest",
+    "webRequestBlocking",
+    "tabs",
+    "*://chatgpt.com/*",
+    "*://*.chatgpt.com/*",
+    "*://gemini.google.com/*",
+    "http://127.0.0.1:5170/*"
+  ],
+  "background": {
+    "scripts": ["gate-core.js", "background.js"],
+    "persistent": true
+  },
+  "incognito": "spanning"
+}

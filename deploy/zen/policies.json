@@ -1,0 +1,24 @@
+{
+  "policies": {
+    "DisableAppUpdate": true,
+    "DontCheckDefaultBrowser": true,
+    "Proxy": {
+      "Mode": "autoConfig",
+      "AutoConfigURL": "file:///app/etc/zen/gate.pac",
+      "Locked": true
+    },
+    "Preferences": {
+      "network.proxy.failover_direct": {
+        "Value": false,
+        "Status": "locked"
+      }
+    },
+    "ExtensionSettings": {
+      "tables-gate@nebula.local": {
+        "installation_mode": "force_installed",
+        "install_url": "file:///app/etc/zen/tables-gate.xpi",
+        "private_browsing": true
+      }
+    }
+  }
+}

@@ -37,7 +37,7 @@ export function initialState(): AppState {
   };
 }
 
-const MODES: readonly Mode[] = ["focused", "mixed", "speed", "weakness", "assessment"];
+const MODES: readonly Mode[] = ["focused", "mixed", "speed", "weakness", "assessment", "gate"];
 
 const isObj = (v: unknown): v is Record<string, unknown> => typeof v === "object" && v !== null && !Array.isArray(v);
 const isNum = (v: unknown): v is number => typeof v === "number" && Number.isFinite(v);

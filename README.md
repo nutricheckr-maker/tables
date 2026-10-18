@@ -13,7 +13,11 @@ npm run build && npm start
 
 Checks: `npm run check` runs lint, type-check and the Vitest suite. `npm test` runs only the tests.
 
-Progress lives in this browser's `localStorage` (key `tables.progress.v1`). Use Settings → Export JSON to make backups.
+Progress is kept by the tables service in `~/.local/state/tables/progress.json`, so every browser and address shares one record. Each browser keeps a `localStorage` mirror (key `tables.progress.v1`) as an offline fallback; the copies are merged, never overwritten. Use Settings → Export JSON to make backups.
+
+## Mental-math gate
+
+This app also runs the gate that locks ChatGPT, Gemini and Stream behind a 10-question, 40-second challenge drawn only from facts you have already practised. It runs as `tables.service` (`server.mjs`) at http://127.0.0.1:5170. See [GATE.md](GATE.md) for the rules, enforcement and lifecycle, the commands, and troubleshooting.
 
 ## Keyboard
 
@@ -39,8 +43,9 @@ src/lib/engine/        pure TypeScript, no React, no storage — all learning lo
   assessment.ts        stratified assessment builder + evaluator
   advancement.ts       stage readiness checklist
   analytics.ts         dashboard aggregates
-src/lib/persistence/   AppState schema, validation, migrations, Repository interface,
-                       LocalStorageRepository / MemoryRepository
+src/lib/persistence/   AppState schema, validation, migrations, merge, Repository interface,
+                       ServerRepository (service + localStorage mirror) / LocalStorageRepository /
+                       MemoryRepository; server-file.ts is the service's copy
 src/lib/store/         AppStore (immutable updates, debounced saves, only when changed) + React hooks
 src/components, src/app  UI: dashboard (/), trainer (/train), settings (/settings)
 tests/                 Vitest suite for the engine, persistence and store
@@ -96,7 +101,7 @@ An assessment passed earlier is only a practice run and does not count.
 
 ## Limitations
 
-- Single browser and device. There is no sync; use export/import to move data. Two tabs open at once will each save their own state, and the most recent save wins.
+- One machine. Every browser and tab on this laptop shares progress through the tables service, and concurrent tabs merge rather than overwrite. There is no sync to other devices; use export/import to move data. Settings are last-writer-wins.
 - Offline support comes from a hand-written service worker that runs only in production builds. A page you have never opened online is not cached.
 - The weak-fact rules, band definitions and speed targets are reasoned defaults, not calibrated on real data. All of them can be changed in Settings except the band rules.
 - Changing settings re-evaluates all statuses immediately, so a stricter setting can move facts from mastered back to developing.
